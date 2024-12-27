@@ -32,7 +32,10 @@ namespace AxPlugin
             //stress.StressTesting();
         }
 
+        //TODO:XML
         private static bool _isCrossValidating = false;
+
+        //TODO:XML
         private bool _isValidatingDependencies = false;
 
         /// <summary>
@@ -91,6 +94,7 @@ namespace AxPlugin
             }
         }
 
+         //TODO: duplication
         /// <summary>
         /// Обработчик выхода из текстбокса "Длина лезвия".
         /// </summary>
@@ -187,14 +191,15 @@ namespace AxPlugin
         /// <param name="textBox">Используемый текстбокс.</param>
         /// <param name="parameterType">Тип параметра.</param>
         private void ValidateAndSetColors(
-        System.Windows.Forms.TextBox textBox,
-        ParamType parameterType)
+            System.Windows.Forms.TextBox textBox,
+            ParamType parameterType)
         {
             try
             {
                 double value = double.Parse(textBox.Text); // Преобразуем значение
                 Parameter parameter = new Parameter();
 
+                //TODO: перенести на уровень parameters
                 // Устанавливаем границы параметра
                 switch (parameterType)
                 {
@@ -248,6 +253,7 @@ namespace AxPlugin
             }
         }
 
+        //TODO:XML
         private void ValidateDependencies()
         {
             if (_isValidatingDependencies) return; // Если уже идет валидация, выходим
@@ -298,7 +304,7 @@ namespace AxPlugin
             }
         }
 
-
+        //TODO: RSDN
         /// <summary>
         /// Обработчик изменения состояния чекбокса "Пожарный топор".
         /// </summary>
@@ -310,6 +316,7 @@ namespace AxPlugin
             _builder.CheckBoxFireAx = checkBoxFireAx.Checked;
         }
 
+        //TODO: RSDN
         /// <summary>
         /// Обработчик изменения состояния чекбокса "Отверстие для подвеса".
         /// </summary>

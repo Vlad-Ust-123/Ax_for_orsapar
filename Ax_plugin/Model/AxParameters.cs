@@ -9,8 +9,6 @@ namespace AxPlugin
     /// </summary>
     public class AxParameters
     {
-
-        
         /// <summary>
         /// Словарь, содержащий параметры модели.
         /// </summary>
@@ -61,12 +59,14 @@ namespace AxPlugin
 
             if (parameterType == ParamType.LengthBlade)
             {
+                //TODO: RSDN
                 ValidateDependentParameter(ParamType.LengthHandle, parameter, 3, 1, exceptions, "Длина ручки");
                 ValidateDependentParameter(ParamType.LengthButt, parameter, 0.8, 2, exceptions, "Длина обуха");
                 ValidateDependentParameter(ParamType.WidthHandle, parameter, 0.2, 4, exceptions, "Ширина рукояти");
             }
             else if (parameterType == ParamType.LengthButt)
             {
+                //TODO: RSDN
                 ValidateDependentParameter(ParamType.ThicknessButt, parameter, 0.3, 4, exceptions, "Ширина топорища");
             }
 
@@ -86,12 +86,12 @@ namespace AxPlugin
         /// <param name="exceptions">Список исключений для накопления ошибок.</param>
         /// <param name="parameterName">Имя проверяемого параметра.</param>
         private void ValidateDependentParameter(
-        ParamType dependentType,
-        Parameter baseParameter,
-        double multiplier,
-        double tolerance,
-        List<string> exceptions,
-        string parameterName)
+            ParamType dependentType,
+            Parameter baseParameter,
+            double multiplier,
+            double tolerance,
+            List<string> exceptions,
+            string parameterName)
         {
             if (_axParameters.TryGetValue(dependentType, out var dependentParameter))
             {
@@ -100,10 +100,12 @@ namespace AxPlugin
 
                 if (dependentParameter.Value < expectedMin)
                 {
+                    //TODO: RSDN
                     exceptions.Add($"{parameterName} меньше минимального допустимого значения ({expectedMin} мм).");
                 }
                 else if (dependentParameter.Value > expectedMax)
                 {
+                    //TODO: RSDN
                     exceptions.Add($"{parameterName} больше максимального допустимого значения ({expectedMax} мм).");
                 }
             }

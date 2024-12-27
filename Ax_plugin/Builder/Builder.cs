@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 
 namespace AxPlugin
 {
+    //TODO:XML
     public class Builder
     {
         /// <summary>
@@ -13,11 +14,13 @@ namespace AxPlugin
         /// </summary>
         private readonly Wrapper _wrapper;
 
+        //TODO: rename
         /// <summary>
         /// Флаг для активации функциональности "Пожарный топор".
         /// </summary>
         public bool CheckBoxFireAx { get; set; } = false;
 
+        //TODO: rename
         /// <summary>
         /// Флаг для активации функциональности "Отверстие для подвеса".
         /// </summary>
@@ -192,6 +195,7 @@ namespace AxPlugin
             // Создаем эскиз треугольника на плоскости XOY
             ISketch triangleSketch = _wrapper.CreateSketchOnPlane(part, sidePlane2, "Эскиз: Треугольник для выреза");
 
+            //TODO: RSDN
             // Координаты первой точки
             double x1_2 = -width / 2;
             double y1_2 = thickness / 2;
@@ -213,6 +217,7 @@ namespace AxPlugin
             // Создаем второй эскиз треугольника на плоскости XOY
             ISketch triangleSketch_2 = _wrapper.CreateSketchOnPlane(part, sidePlane2, "Эскиз: Треугольник для выреза");
 
+            //TODO: RSDN
             // Координаты первой точки
             double x1_3 = -width / 2;
             double y1_3 = -thickness / 2;
@@ -249,7 +254,7 @@ namespace AxPlugin
                 // Создаем эскиз для наконечника на плоскости XOY
                 ISketch fireTip = _wrapper.CreateSketchOnPlane(part, sidePlane, "Эскиз: наконечник");
 
-
+                //TODO: RSDN
                 double TipLenght = widthButt.Value;       // длина прямоугольника
                 double TipWidth = thicknessButt.Value;  // ширина прямоугольника
 
@@ -299,6 +304,7 @@ namespace AxPlugin
                 parameters.AllParameters.TryGetValue(ParamType.LengthButt, out Parameter lengthButt))
             {
                 double diameter = 10;
+                //TODO: const
                 double x = ((-widthButt.Value / 2) + -widthButt.Value) - (((-widthButt.Value / 2) + -widthButt.Value) / 8);
                 double y = ((-lengthButt.Value / 5) + (lengthBlade.Value / 5)) - (lengthBlade.Value / 12);
 

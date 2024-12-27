@@ -105,6 +105,7 @@ namespace Kompas
             sketch.EndEdit();
         }
 
+        //TODO:XML
         public ISketch CreateCircleAndReturnSketch(IPart7 part, object plane, double x, double y, double diameter, string sketchName)
         {
             // Создаем эскиз на заданной плоскости с именем
@@ -218,6 +219,7 @@ namespace Kompas
             return plane; // Возвращаем объект
         }
 
+        //TODO:XML
         public ISketch CreateSketchOnPlane(IPart7 part, object plane, string name)
         {
             IModelContainer modelContainer = part as IModelContainer;

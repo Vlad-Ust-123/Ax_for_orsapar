@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 
 namespace AxPlugin
 {
+    //TODO:XML
     public class Parameter
     {
         private double _maxValue;
@@ -21,13 +22,14 @@ namespace AxPlugin
             }
         }
 
-
+        //TODO: refactor
         public double MinValue
         {
             get => _minValue;
             set => _minValue = value;
         }
 
+        //TODO: refactor
         public double MaxValue
         {
             get => _maxValue;
