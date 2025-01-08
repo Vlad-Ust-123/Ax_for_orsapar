@@ -4,119 +4,59 @@ using NUnit.Framework;
 
 namespace ModelTest.UnitTestParameter
 {
-    /// <summary>
-    /// Класс Unit тестов класса <see cref="Parameter"/>.
-    /// </summary>
     [TestFixture]
     public class ParameterTest
     {
-        /// <summary>
-        /// Тестовый параметр.
-        /// </summary>
-        private Parameter _parameter = new Parameter();
-
-        /// <summary>
-        /// Позитивный тест геттера MaxValue.
-        /// </summary>
-        [Test(Description = "Позитивный тест геттера MaxValue.")]
-        public void TestProjectGetMaxValue()
+        [Test]
+        public void Parameter_Constructor_InitializesCorrectly()
         {
-            var expected = 300;
-            this._parameter.MaxValue = 300;
-            var actual = this._parameter.MaxValue;
-            NUnit.Framework.Assert.AreEqual(expected, actual);
+            var parameter = new Parameter(ParamType.LengthBlade, 200);
+            Assert.AreEqual(100, parameter.MinValue);
+            Assert.AreEqual(300, parameter.MaxValue);
+            Assert.AreEqual(200, parameter.Value);
         }
 
-        /// <summary>
-        /// Позитивный тест сеттера MaxValue.
-        /// </summary>
-        [Test(Description = "Позитивный тест сеттера MaxValue.")]
-        public void TestProjectSetMaxValue()
+        [Test]
+        public void MinValue_Get_ReturnsCorrectValue()
         {
-            Parameter expected = new Parameter();
-            this._parameter.MaxValue = 300;
-            expected.MaxValue = 300;
-            var actual = this._parameter;
-            Assert.AreEqual(expected.MaxValue, actual.MaxValue);
+            var parameter = new Parameter(ParamType.LengthBlade, 200);
+            Assert.AreEqual(100, parameter.MinValue);
         }
 
-        /// <summary>
-        /// Позитивный тест геттера MinValue.
-        /// </summary>
-        [Test(Description = "Позитивный тест геттера MinValue.")]
-        public void TestProjectGetMinValue()
+        [Test]
+        public void MaxValue_Get_ReturnsCorrectValue()
         {
-            var expected = 100;
-            this._parameter.MinValue = 100;
-            var actual = this._parameter.MinValue;
-            Assert.AreEqual(expected, actual);
+            var parameter = new Parameter(ParamType.LengthBlade, 200);
+            Assert.AreEqual(300, parameter.MaxValue);
         }
 
-        /// <summary>
-        /// Позитивный тест сеттера MinValue.
-        /// </summary>
-        [Test(Description = "Позитивный тест сеттера MinValue.")]
-        public void TestProjectSetMinValue()
+        [Test]
+        public void Value_Get_ReturnsCorrectValue()
         {
-            Parameter expected = new Parameter();
-            this._parameter.MinValue = 100;
-            expected.MinValue = 100;
-            var actual = this._parameter;
-            Assert.AreEqual(expected.MinValue, actual.MinValue);
+            var parameter = new Parameter(ParamType.LengthBlade, 200);
+            Assert.AreEqual(200, parameter.Value);
         }
 
-        /// <summary>
-        /// Позитивный тест геттера Value.
-        /// </summary>
-        [Test(Description = "Позитивный тест геттера Value.")]
-        public void TestProjectGetValue()
+        [Test]
+        public void Value_Set_ValidValue_SetsCorrectly()
         {
-            var expected = 150;
-            this._parameter.MinValue = 100;
-            this._parameter.MaxValue = 300;
-            this._parameter.Value = 150;
-            var actual = this._parameter.Value;
-            Assert.AreEqual(expected, actual);
+            var parameter = new Parameter(ParamType.LengthBlade, 200);
+            parameter.Value = 250;
+            Assert.AreEqual(250, parameter.Value);
         }
 
-        /// <summary>
-        /// Позитивный тест сеттера Value.
-        /// </summary>
-        [Test(Description = "Позитивный тест сеттера Value.")]
-        public void TestProjectSetValue()
+        [Test]
+        public void Value_Set_LessThanMinValue_ThrowsException()
         {
-            Parameter expected = new Parameter();
-            this._parameter.MinValue = 100;
-            this._parameter.MaxValue = 300;
-            this._parameter.Value = 150;
-            expected.MinValue = 100;
-            expected.MaxValue = 300;
-            expected.Value = 150;
-            var actual = this._parameter.Value;
-            Assert.AreEqual(expected.Value, actual);
+            var parameter = new Parameter(ParamType.LengthBlade, 200);
+            Assert.Throws<ArgumentException>(() => parameter.Value = 50);
         }
 
-        /// <summary>
-        /// TestCase методов проверки сеттера свойства Value.
-        /// </summary>
-        /// <param name="wrongValue">Неверное поле текст.</param>
-        /// <param name="message">Текст ошибки.</param>
-        [TestCase(
-            90,
-            "Должно возникать исключение, если значение меньше MinValue",
-            TestName = "Простая ошибка")]
-        [TestCase(
-            310,
-            "Должно возникать исключение, если значение больше MaxValue",
-            TestName = "Простая ошибка")]
-        public void TestSetArgumentException(int wrongValue, string message)
+        [Test]
+        public void Value_Set_GreaterThanMaxValue_ThrowsException()
         {
-            this._parameter.MaxValue = 300;
-            this._parameter.MinValue = 100;
-            Assert.Throws<ArgumentException>(
-            () => { this._parameter.Value = wrongValue; },
-            message);
+            var parameter = new Parameter(ParamType.LengthBlade, 200);
+            Assert.Throws<ArgumentException>(() => parameter.Value = 350);
         }
-
     }
 }

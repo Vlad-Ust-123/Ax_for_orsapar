@@ -32,8 +32,16 @@ namespace AxPlugin
             //stress.StressTesting();
         }
 
-        private static bool _isCrossValidating = false;
-        private bool _isValidatingDependencies = false;
+        /// <summary>
+        /// Указывает, выполняется ли в данный момент перекрестная валидация.
+        /// </summary>
+        private static bool isCrossValidating = false;
+
+        /// <summary>
+        /// Указывает, выполняется ли в данный момент проверка зависимостей.
+        /// </summary>
+        private bool isValidatingDependencies = false;
+
 
         /// <summary>
         /// Инициализация ряда параметров при загрузке формы.
@@ -92,23 +100,30 @@ namespace AxPlugin
         }
 
         /// <summary>
+        /// Универсальный обработчик выхода из текстбокса. Выполняет валидацию и обновляет зависимости.
+        /// </summary>
+        /// <param name="textBox">Текстбокс, который вызвал обработчик.</param>
+        /// <param name="parameterType">Тип параметра, связанный с текстбоксом.</param>
+        private void HandleTextBoxLeave(TextBox textBox, ParamType parameterType)
+        {
+            ValidateAndSetColors(textBox, parameterType);
+            ValidateDependencies();
+        }
+
+        /// <summary>
         /// Обработчик выхода из текстбокса "Длина лезвия".
         /// </summary>
-   
-        private void LenghtBladeTextBox_Leave(object sender, EventArgs e) //DBM
+        private void LenghtBladeTextBox_Leave(object sender, EventArgs e)
         {
-            ValidateAndSetColors(this.LenghtBladeTextBox, ParamType.LengthBlade);
-            ValidateDependencies();
+            HandleTextBoxLeave(this.LenghtBladeTextBox, ParamType.LengthBlade);
         }
 
         /// <summary>
         /// Обработчик выхода из текстбокса "Длинна топорища".
         /// </summary>
-     
         private void textBoxWidthButt_Leave(object sender, EventArgs e)
         {
-            ValidateAndSetColors(this.textBoxWidthButt, ParamType.WidthButt);
-            ValidateDependencies();
+            HandleTextBoxLeave(this.textBoxWidthButt, ParamType.WidthButt);
         }
 
         /// <summary>
@@ -116,29 +131,33 @@ namespace AxPlugin
         /// </summary>
         private void TextBoxLengthHandle_Leave(object sender, EventArgs e)
         {
-            ValidateAndSetColors(this.TextBoxLengthHandle, ParamType.LengthHandle);
-            ValidateDependencies();
+            HandleTextBoxLeave(this.TextBoxLengthHandle, ParamType.LengthHandle);
         }
+
         /// <summary>
-        /// Обработчик выхода из текстбокса "Длинна ручки топора".
+        /// Обработчик выхода из текстбокса "Длинна обуха".
         /// </summary>
         private void TextBoxLenghtButt_Leave(object sender, EventArgs e)
         {
-            ValidateAndSetColors(this.textBoxLenghtButt, ParamType.LengthButt);
-            ValidateDependencies();
+            HandleTextBoxLeave(this.textBoxLenghtButt, ParamType.LengthButt);
         }
 
+        /// <summary>
+        /// Обработчик выхода из текстбокса "Ширина рукояти".
+        /// </summary>
         private void textBoxWidthHandle_Leave(object sender, EventArgs e)
         {
-            ValidateAndSetColors(this.textBoxWidthHandle, ParamType.WidthHandle);
-            
+            HandleTextBoxLeave(this.textBoxWidthHandle, ParamType.WidthHandle);
         }
 
+        /// <summary>
+        /// Обработчик выхода из текстбокса "Толщина обуха".
+        /// </summary>
         private void textBoxThicknessButt_Leave(object sender, EventArgs e)
         {
-            ValidateAndSetColors(this.textBoxThicknessButt, ParamType.ThicknessButt);
-            ValidateDependencies();
+            HandleTextBoxLeave(this.textBoxThicknessButt, ParamType.ThicknessButt);
         }
+
         /// <summary>
         /// Метод для установки цвета и подсказки для текстбокса в зависимости от типа параметра.
         /// </summary>
@@ -186,75 +205,49 @@ namespace AxPlugin
         /// </summary>
         /// <param name="textBox">Используемый текстбокс.</param>
         /// <param name="parameterType">Тип параметра.</param>
-        private void ValidateAndSetColors(
-        System.Windows.Forms.TextBox textBox,
-        ParamType parameterType)
+        private void ValidateAndSetColors(TextBox textBox, ParamType parameterType)
         {
             try
             {
-                double value = double.Parse(textBox.Text); // Преобразуем значение
-                Parameter parameter = new Parameter();
+                double value = double.Parse(textBox.Text); // Преобразуем значение.
 
-                // Устанавливаем границы параметра
-                switch (parameterType)
-                {
-                    case ParamType.LengthBlade:
-                        parameter.MaxValue = 300;
-                        parameter.MinValue = 100;
-                        break;
-                    case ParamType.WidthButt:
-                        parameter.MaxValue = 150;
-                        parameter.MinValue = 80;
-                        break;
-                    case ParamType.LengthHandle:
-                        parameter.MaxValue = 900;
-                        parameter.MinValue = 300;
-                        break;
-                    case ParamType.LengthButt:
-                        parameter.MaxValue = 270;
-                        parameter.MinValue = 80;
-                        break;
-                    case ParamType.WidthHandle:
-                        parameter.MaxValue = 60;
-                        parameter.MinValue = 20;
-                        break;
-                    case ParamType.ThicknessButt:
-                        parameter.MaxValue = 72;
-                        parameter.MinValue = 24;
-                        break;
-                }
+                // Создаем параметр, передавая тип параметра и значение.
+                Parameter parameter = new Parameter(parameterType, value);
 
-                // Устанавливаем значение параметра
-                parameter.Value = value;
+                // Сохраняем параметр в коллекцию.
+                _parameters.SetParameter(parameterType, parameter);
 
-                // Сохраняем параметр в коллекцию
-                this._parameters.SetParameter(parameterType, parameter);
-
-                // Успешная валидация — зеленый цвет
+                // Успешная валидация — зеленый цвет.
                 SetColors(parameterType, Color.Green, null);
 
-                // Перекрестная проверка зависимых параметров
-                if (!_isCrossValidating)
+                // Перекрестная проверка зависимых параметров.
+                if (!isCrossValidating)
                 {
-                    _isCrossValidating = true;
+                    isCrossValidating = true;
                     CrossValidate(parameterType);
-                    _isCrossValidating = false;
+                    isCrossValidating = false;
                 }
             }
             catch (Exception ex)
             {
-                // Ошибка валидации — красный цвет
+                // Ошибка валидации — красный цвет.
                 SetColors(parameterType, Color.Red, ex.Message);
             }
         }
 
+
+        /// <summary>
+        /// Выполняет валидацию зависимых параметров, связанных с длиной лезвия, длиной обуха, 
+        /// а также других параметров ножа. Метод предотвращает повторный запуск валидации, 
+        /// если она уже выполняется.
+        /// </summary>
         private void ValidateDependencies()
         {
-            if (_isValidatingDependencies) return; // Если уже идет валидация, выходим
-           
+            if (isValidatingDependencies) return; // Если уже идет валидация, выходим
+
             try
             {
-                _isValidatingDependencies = true;
+                isValidatingDependencies = true;
 
                 // Проверяем зависимые параметры от длины лезвия
                 LenghtBladeTextBox_Leave(null, null);
@@ -269,11 +262,17 @@ namespace AxPlugin
             }
             finally
             {
-                _isValidatingDependencies = false; // Обязательно сбрасываем флаг
+                isValidatingDependencies = false; // Обязательно сбрасываем флаг
             }
         }
 
-
+        /// <summary>
+        /// Выполняет перекрестную валидацию параметров в зависимости от их типа. 
+        /// Метод обновляет зависимые параметры и их состояние (например, цвет) 
+        /// на основе заданного параметра.
+        /// </summary>
+        /// <param name="parameterType">Тип параметра <see cref="ParamType"/>, 
+        /// для которого выполняется перекрестная валидация.</param>
         private void CrossValidate(ParamType parameterType)
         {
             // Проверяем зависимости
@@ -286,7 +285,7 @@ namespace AxPlugin
                     ValidateAndSetColors(this.textBoxWidthHandle, ParamType.WidthHandle);
                     break;
                 case ParamType.LengthButt:
-                    // Длина обуха влияет на ширину топорища
+                    // Длина обуха влияет на толщину топорища
                     ValidateAndSetColors(this.textBoxThicknessButt, ParamType.ThicknessButt);
                     break;
                 case ParamType.LengthHandle:
@@ -299,6 +298,7 @@ namespace AxPlugin
         }
 
 
+        
         /// <summary>
         /// Обработчик изменения состояния чекбокса "Пожарный топор".
         /// </summary>
@@ -306,10 +306,11 @@ namespace AxPlugin
         /// <param name="e">Данные события.</param>
         private void checkBoxFireAx_CheckedChanged(object sender, EventArgs e)
         {
-            // Устанавливаем состояние CheckBoxFireAx в зависимости от текущего состояния CheckBox
-            _builder.CheckBoxFireAx = checkBoxFireAx.Checked;
+            // Устанавливаем состояние IsFireAx в зависимости от текущего состояния CheckBox
+            _builder.IsFireAx = checkBoxFireAx.Checked;
         }
 
+       
         /// <summary>
         /// Обработчик изменения состояния чекбокса "Отверстие для подвеса".
         /// </summary>
@@ -317,8 +318,8 @@ namespace AxPlugin
         /// <param name="e">Данные события.</param>
         private void checkBoxMountingHole_CheckedChanged(object sender, EventArgs e)
         {
-            // Устанавливаем состояние CheckBoxMountingHole в зависимости от текущего состояния CheckBox
-            _builder.CheckBoxMountingHole = checkBoxMountingHole.Checked;
+            // Устанавливаем состояние IsMountingHole в зависимости от текущего состояния CheckBox
+            _builder.IsMountingHole = checkBoxMountingHole.Checked;
         }
     }
 }

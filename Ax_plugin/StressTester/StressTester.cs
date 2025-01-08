@@ -12,19 +12,24 @@ namespace Perfomance
     /// </summary>
     public class StressTester
     {
+        /// <summary>
+        /// Метод инициализации параметров для тестирования.
+        /// </summary>
+        /// <returns>Объект AxParameters с предустановленными параметрами.</returns>
         private AxParameters InitializeParameters()
         {
             var parameters = new AxParameters();
 
-            parameters.SetParameter(ParamType.LengthBlade, new Parameter(100, 300, 200));
-            parameters.SetParameter(ParamType.LengthHandle, new Parameter(300, 900, 600));
-            parameters.SetParameter(ParamType.WidthHandle, new Parameter(20, 60, 40));
-            parameters.SetParameter(ParamType.LengthButt, new Parameter(80, 270, 150));
-            parameters.SetParameter(ParamType.ThicknessButt, new Parameter(24, 72, 48));
-            parameters.SetParameter(ParamType.WidthButt, new Parameter(80, 150, 115));
+            parameters.SetParameter(ParamType.LengthBlade, new Parameter(ParamType.LengthBlade, 200));
+            parameters.SetParameter(ParamType.LengthHandle, new Parameter(ParamType.LengthHandle, 600));
+            parameters.SetParameter(ParamType.WidthHandle, new Parameter(ParamType.WidthHandle, 40));
+            parameters.SetParameter(ParamType.LengthButt, new Parameter(ParamType.LengthButt, 150));
+            parameters.SetParameter(ParamType.ThicknessButt, new Parameter(ParamType.ThicknessButt, 48));
+            parameters.SetParameter(ParamType.WidthButt, new Parameter(ParamType.WidthButt, 115));
 
             return parameters;
         }
+
         /// <summary>
         /// Метод для нагрузочного тестирования.
         /// </summary>
@@ -55,8 +60,5 @@ namespace Perfomance
                 stopWatch.Reset();
             }
         }
-
-        
-        
     }
 }

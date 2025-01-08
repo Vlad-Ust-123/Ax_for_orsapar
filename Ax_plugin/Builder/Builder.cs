@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 
 namespace AxPlugin
 {
+    
     public class Builder
     {
         /// <summary>
@@ -13,15 +14,17 @@ namespace AxPlugin
         /// </summary>
         private readonly Wrapper _wrapper;
 
+        //
         /// <summary>
         /// Флаг для активации функциональности "Пожарный топор".
         /// </summary>
-        public bool CheckBoxFireAx { get; set; } = false;
+        public bool IsFireAx { get; set; } = false;
 
+        //
         /// <summary>
         /// Флаг для активации функциональности "Отверстие для подвеса".
         /// </summary>
-        public bool CheckBoxMountingHole { get; set; } = false;
+        public bool IsMountingHole { get; set; } = false;
 
         /// <summary>
         /// Конструктор класса <see cref="Builder"/>.
@@ -50,13 +53,13 @@ namespace AxPlugin
             BuildButt(part, parameters);
 
             // Добавляем наконечник для пожарного топора, если активирован соответствующий флажок.
-            if (CheckBoxFireAx)
+            if (IsFireAx)
             {
                 BuildFireAxTip(part, parameters);
             }
 
             // Добавляем отверстие для подвеса, если активирован соответствующий флажок.
-            if (CheckBoxMountingHole)
+            if (IsMountingHole)
             {
                 BuildMountingHole(part, parameters);
             }
@@ -68,7 +71,8 @@ namespace AxPlugin
         /// <param name="part">Часть топора, в которой строится рукоять.</param>
         /// <param name="parameters">Параметры топора, содержащие размеры рукояти.</param>
         /// <exception cref="ArgumentException">
-        /// Выбрасывается, если параметры <see cref="ParamType.WidthHandle"/> и <see cref="ParamType.LengthHandle"/> не заданы.
+        /// Выбрасывается, если параметры <see cref="ParamType.WidthHandle"/> и
+        /// <see cref="ParamType.LengthHandle"/> не заданы.
         /// </exception>
         private void BuildHandle(IPart7 part, AxParameters parameters)
         {
@@ -96,7 +100,8 @@ namespace AxPlugin
         /// <param name="part">Часть топора, в которой строится обух.</param>
         /// <param name="parameters">Параметры топора, содержащие размеры обуха.</param>
         /// <exception cref="ArgumentException">
-        /// Выбрасывается, если параметры <see cref="ParamType.LengthBlade"/>, <see cref="ParamType.WidthButt"/>,
+        /// Выбрасывается, если параметры <see cref="ParamType.LengthBlade"/>, 
+        /// <see cref="ParamType.WidthButt"/>,
         /// <see cref="ParamType.LengthButt"/> и <see cref="ParamType.ThicknessButt"/> не заданы.
         /// </exception>
         private void BuildButt(IPart7 part, AxParameters parameters)
@@ -116,7 +121,8 @@ namespace AxPlugin
             else
             {
                 // Выбрасываем исключение, если параметры не заданы.
-                throw new ArgumentException("Параметры LengthBlade, WidthButt, LengthButt и ThicknessButt обязательны для построения обуха.");
+                throw new ArgumentException("Параметры LengthBlade, WidthButt, " +
+                    "LengthButt и ThicknessButt обязательны для построения обуха.");
             }
         }
 
@@ -147,13 +153,11 @@ namespace AxPlugin
         /// <param name="thickness">Толщина лезвия.</param>
         private void BuildBlade(IPart7 part, double width, double lengthButt, double lengthBlade, double thickness)
         {
-            // Создаем рубящую часть топора от сюда
-
             // Параметры трапеции (равнобедренная)
             double topBase = lengthButt;    // Верхняя основа (меньшая сторона)
             double bottomBase = lengthBlade; // Нижняя основа (большая сторона)
             double height = width;     // Высота трапеции
-                                                //Задаем плоскость
+            //Задаем плоскость
             object sidePlane = _wrapper.GetSidePlane(part, Kompas6Constants3D.ksObj3dTypeEnum.o3d_planeXOZ);
 
             // Создаем эскиз на плоскости ХОZ
@@ -183,53 +187,67 @@ namespace AxPlugin
             _wrapper.CreateLine(trapezoidSketch, x3, y3, x1, y1); // Левая боковая сторона
 
             // Выдавливаем трапецию в обе стороны
-            _wrapper.ExtrudeSketch(trapezoidSketch, thickness / 2, "Равнобедренная трапеция на боковой плоскости", false);
-            _wrapper.ExtrudeSketch(trapezoidSketch, -thickness / 2, "Равнобедренная трапеция на боковой плоскости", false);
-
+            _wrapper.ExtrudeSketch(trapezoidSketch, thickness / 2, 
+                "Равнобедренная трапеция на боковой плоскости", false);
+            _wrapper.ExtrudeSketch(trapezoidSketch, -thickness / 2, 
+                "Равнобедренная трапеция на боковой плоскости", false);
 
             // Задаем плоскость для треугольников
             object sidePlane2 = _wrapper.GetSidePlane(part, Kompas6Constants3D.ksObj3dTypeEnum.o3d_planeXOY);
             // Создаем эскиз треугольника на плоскости XOY
             ISketch triangleSketch = _wrapper.CreateSketchOnPlane(part, sidePlane2, "Эскиз: Треугольник для выреза");
 
+            //
             // Координаты первой точки
-            double x1_2 = -width / 2;
-            double y1_2 = thickness / 2;
+            double xFirstPointTriangle = -width / 2;
+            double yFirstPointTriangle = thickness / 2;
             // Координаты Второй точки
-            double x2_2 = -lengthButt * 1.5;
-            double y2_2 = thickness / 2;
+            double xSecondPointTriangle = -lengthButt * 1.5;
+            double ySecondPointTriangle = thickness / 2;
             // Координаты третьей точки
-            double x3_2 = -width * 1.5;
-            double y3_2 = 0;
+            double xThirdPointTriangle = -width * 1.5;
+            double yThirdPointTriangle = 0;
 
             // Соединаем точки
-            _wrapper.CreateLine(triangleSketch, x1_2, y1_2, x2_2, y2_2);
-            _wrapper.CreateLine(triangleSketch, x2_2, y2_2, x3_2, y3_2);
-            _wrapper.CreateLine(triangleSketch, x3_2, y3_2, x1_2, y1_2);
+            _wrapper.CreateLine
+                (triangleSketch, xFirstPointTriangle, yFirstPointTriangle,
+                                xSecondPointTriangle, ySecondPointTriangle);
+            _wrapper.CreateLine
+                (triangleSketch, xSecondPointTriangle, ySecondPointTriangle, 
+                                    xThirdPointTriangle, yThirdPointTriangle);
+            _wrapper.CreateLine
+                (triangleSketch, xThirdPointTriangle, yThirdPointTriangle, 
+                                    xFirstPointTriangle, yFirstPointTriangle);
             //Симетрично вырезаем треугольник
             _wrapper.CutExtrudeSymmetric(triangleSketch, 700, "Симметричное вырезание");
 
 
             // Создаем второй эскиз треугольника на плоскости XOY
-            ISketch triangleSketch_2 = _wrapper.CreateSketchOnPlane(part, sidePlane2, "Эскиз: Треугольник для выреза");
+            ISketch triangleSketch2 = _wrapper.CreateSketchOnPlane(part, sidePlane2, "Эскиз: Треугольник для выреза");
 
             // Координаты первой точки
-            double x1_3 = -width / 2;
-            double y1_3 = -thickness / 2;
+            xFirstPointTriangle = -width / 2;
+            yFirstPointTriangle = -thickness / 2;
             // Координаты Второй точки
-            double x2_3 = -lengthButt * 1.5;
-            double y2_3 = -thickness / 2;
+            xSecondPointTriangle = -lengthButt * 1.5;
+            ySecondPointTriangle = -thickness / 2;
             // Координаты третьей точки
-            double x3_3 = -width * 1.5;
-            double y3_3 = 0;
+            xThirdPointTriangle = -width * 1.5;
+            yThirdPointTriangle = 0;
 
             // Соединаем точки
-            _wrapper.CreateLine(triangleSketch_2, x1_3, y1_3, x2_3, y2_3);
-            _wrapper.CreateLine(triangleSketch_2, x2_3, y2_3, x3_3, y3_3);
-            _wrapper.CreateLine(triangleSketch_2, x3_3, y3_3, x1_3, y1_3);
+            _wrapper.CreateLine
+                (triangleSketch2, xFirstPointTriangle, yFirstPointTriangle,
+                                xSecondPointTriangle, ySecondPointTriangle);
+            _wrapper.CreateLine
+                (triangleSketch2, xSecondPointTriangle, ySecondPointTriangle,
+                                    xThirdPointTriangle, yThirdPointTriangle);
+            _wrapper.CreateLine
+                (triangleSketch2, xThirdPointTriangle, yThirdPointTriangle,
+                                    xFirstPointTriangle, yFirstPointTriangle);
             //Симетрично вырезаем треугольник
-            _wrapper.CutExtrudeSymmetric(triangleSketch_2, 700, "Симметричное вырезание");
-            //До сюда
+            _wrapper.CutExtrudeSymmetric(triangleSketch2, 700, "Симметричное вырезание");
+            
 
         }
 
@@ -249,32 +267,36 @@ namespace AxPlugin
                 // Создаем эскиз для наконечника на плоскости XOY
                 ISketch fireTip = _wrapper.CreateSketchOnPlane(part, sidePlane, "Эскиз: наконечник");
 
-
-                double TipLenght = widthButt.Value;       // длина прямоугольника
-                double TipWidth = thicknessButt.Value;  // ширина прямоугольника
+                // Длина прямоугольника
+                double tipLenght = widthButt.Value;
+                // Ширина прямоугольника
+                double tipWidth = thicknessButt.Value;  
 
                 // Центрируем прямоугольник 
                 double xStart = widthButt.Value / 2;
                 double yStart = -thicknessButt.Value / 2;
 
                 // Рисуем прямоугольник
-                _wrapper.CreateRectangle(fireTip, xStart, yStart, TipLenght, TipWidth);
+                _wrapper.CreateRectangle(fireTip, xStart, yStart, tipLenght, tipWidth);
                 // Выдавливаем
-                _wrapper.ExtrudeSketch(fireTip, lengthButt.Value / 5, "Прямоугольник для наконечника", false);
+                _wrapper.ExtrudeSketch(fireTip, lengthButt.Value / 5, 
+                    "Прямоугольник для наконечника", false);
 
                 // Задаем плоскость XOZ
-                object sidePlane2 = _wrapper.GetSidePlane(part, Kompas6Constants3D.ksObj3dTypeEnum.o3d_planeXOZ);
+                object sidePlane2 = _wrapper.GetSidePlane(part, 
+                    Kompas6Constants3D.ksObj3dTypeEnum.o3d_planeXOZ);
                 // Создаем эскиз треугольника на плоскости XOZ
-                ISketch triangleSketch = _wrapper.CreateSketchOnPlane(part, sidePlane2, "Эскиз: Треугольник для выреза наконечника");
+                ISketch triangleSketch = _wrapper.CreateSketchOnPlane(part, sidePlane2, 
+                                            "Эскиз: Треугольник для выреза наконечника");
 
                 // Координаты первой точки
                 double x1 = widthButt.Value / 2;
                 double y1 = 0;
                 // Координаты Второй точки
-                double x2 = TipLenght * 1.5;
+                double x2 = tipLenght * 1.5;
                 double y2 = 0;
                 // Координаты Третьей точки
-                double x3 = TipLenght * 1.5;
+                double x3 = tipLenght * 1.5;
                 double y3 = -lengthButt.Value / 5;
 
                 // Соединяем точки
@@ -299,15 +321,22 @@ namespace AxPlugin
                 parameters.AllParameters.TryGetValue(ParamType.LengthButt, out Parameter lengthButt))
             {
                 double diameter = 10;
-                double x = ((-widthButt.Value / 2) + -widthButt.Value) - (((-widthButt.Value / 2) + -widthButt.Value) / 8);
-                double y = ((-lengthButt.Value / 5) + (lengthBlade.Value / 5)) - (lengthBlade.Value / 12);
+                //Смешение относительно ширины обуха (делим на 8 частей)
+                double xHoleOffset = ((-widthButt.Value / 2) + -widthButt.Value) 
+                                - (((-widthButt.Value / 2) + -widthButt.Value) / 8);
+                //Смешение относительно длинны лезвие (делим на 12 частей)
+                double yHoleOffset = ((-lengthButt.Value / 5) + (lengthBlade.Value / 5)) 
+                                                                -(lengthBlade.Value / 12);
+                //Задаем координаты в смещение
+                double x = xHoleOffset;
+                double y = yHoleOffset;
 
                 ISketch sketch = _wrapper.CreateCircleAndReturnSketch(
                     part,
                     _wrapper.GetSidePlane(part, Kompas6Constants3D.ksObj3dTypeEnum.o3d_planeXOZ),
                     x, y, diameter, "Эскиз: отверстие для подвеса");
 
-                _wrapper.CutCircleOnSketch(sketch, 400, "Симметричное вырезание отверстия для подвеса");
+                _wrapper.CutExtrudeSymmetric(sketch, 400, "Симметричное вырезание отверстия для подвеса");
             }
         }
     }

@@ -9,12 +9,11 @@ namespace AxPlugin
     /// </summary>
     public class AxParameters
     {
-
-        
         /// <summary>
         /// Словарь, содержащий параметры модели.
         /// </summary>
-        private Dictionary<ParamType, Parameter> _axParameters = new Dictionary<ParamType, Parameter>();
+        private Dictionary<ParamType, Parameter> _axParameters = 
+            new Dictionary<ParamType, Parameter>();
 
         /// <summary>
         /// Свойство для доступа ко всем параметрам модели.
@@ -58,16 +57,34 @@ namespace AxPlugin
         private void ValidateParameters(ParamType parameterType, Parameter parameter)
         {
             var exceptions = new List<string>();
+            //Множители для вычисления зависимых параметров
+            double multiplierForLengthHandle = 3;
+            double multiplierForLengthButt = 0.8;
+            double multiplierForWidthHandle = 0.2;
+            double multiplierForThicknessButt = 0.3;
+            //Значения для вычисления диапазона допустимыз значений
+            double rangeCalculationForLengthHandle = 1;
+            double rangeCalculationForLengthButt = 2;
+            double rangeCalculationForWidthHandle = 4;
+            double rangeCalculationForThicknessButt = 4;
 
             if (parameterType == ParamType.LengthBlade)
             {
-                ValidateDependentParameter(ParamType.LengthHandle, parameter, 3, 1, exceptions, "Длина ручки");
-                ValidateDependentParameter(ParamType.LengthButt, parameter, 0.8, 2, exceptions, "Длина обуха");
-                ValidateDependentParameter(ParamType.WidthHandle, parameter, 0.2, 4, exceptions, "Ширина рукояти");
+                
+                ValidateDependentParameter(ParamType.LengthHandle, parameter, multiplierForLengthHandle, 
+                    rangeCalculationForLengthHandle, exceptions, "Длина ручки");
+
+                ValidateDependentParameter(ParamType.LengthButt, parameter, multiplierForLengthButt, 
+                    rangeCalculationForLengthButt, exceptions, "Длина обуха");
+
+                ValidateDependentParameter(ParamType.WidthHandle, parameter, multiplierForWidthHandle, 
+                    rangeCalculationForWidthHandle, exceptions, "Ширина рукояти");
             }
             else if (parameterType == ParamType.LengthButt)
             {
-                ValidateDependentParameter(ParamType.ThicknessButt, parameter, 0.3, 4, exceptions, "Ширина топорища");
+                
+                ValidateDependentParameter(ParamType.ThicknessButt, parameter, multiplierForThicknessButt, 
+                    rangeCalculationForThicknessButt, exceptions, "Ширина топорища");
             }
 
             if (exceptions.Any())
@@ -86,12 +103,12 @@ namespace AxPlugin
         /// <param name="exceptions">Список исключений для накопления ошибок.</param>
         /// <param name="parameterName">Имя проверяемого параметра.</param>
         private void ValidateDependentParameter(
-        ParamType dependentType,
-        Parameter baseParameter,
-        double multiplier,
-        double tolerance,
-        List<string> exceptions,
-        string parameterName)
+            ParamType dependentType,
+            Parameter baseParameter,
+            double multiplier,
+            double tolerance,
+            List<string> exceptions,
+            string parameterName)
         {
             if (_axParameters.TryGetValue(dependentType, out var dependentParameter))
             {
@@ -100,11 +117,15 @@ namespace AxPlugin
 
                 if (dependentParameter.Value < expectedMin)
                 {
-                    exceptions.Add($"{parameterName} меньше минимального допустимого значения ({expectedMin} мм).");
+                    
+                    exceptions.Add($"{parameterName} " +
+                        $"меньше минимального допустимого значения ({expectedMin} мм).");
                 }
                 else if (dependentParameter.Value > expectedMax)
                 {
-                    exceptions.Add($"{parameterName} больше максимального допустимого значения ({expectedMax} мм).");
+                    
+                    exceptions.Add($"{parameterName} " +
+                        $"больше максимального допустимого значения ({expectedMax} мм).");
                 }
             }
         }

@@ -21,51 +21,73 @@ namespace AxPlugin
             }
         }
 
-
-        public double MinValue
-        {
-            get => _minValue;
-            set => _minValue = value;
-        }
-
-        public double MaxValue
-        {
-            get => _maxValue;
-            set => _maxValue = value;
-        }
-
+        public double MinValue => _minValue;
+        public double MaxValue => _maxValue;
 
         /// <summary>
-        /// Конструктор для инициализации параметра.
+        /// Конструктор, который принимает тип параметра и автоматически задает границы.
         /// </summary>
-        /// <param name="minValue">Минимальное значение.</param>
-        /// <param name="maxValue">Максимальное значение.</param>
+        /// <param name="type">Тип параметра.</param>
         /// <param name="value">Начальное значение.</param>
-        public Parameter(double minValue, double maxValue, double value)
+        public Parameter(ParamType type, double value)
         {
-            _minValue = minValue;
-            _maxValue = maxValue;
-
-            // Устанавливаем значение через свойство, чтобы применялась валидация
+            SetBounds(type);
             Value = value;
         }
 
-        public Parameter()
+        /// <summary>
+        /// Устанавливает границы параметра на основе типа.
+        /// </summary>
+        /// <param name="type">Тип параметра.</param>
+        private void SetBounds(ParamType type)
         {
+            switch (type)
+            {
+                case ParamType.LengthBlade:
+                    _minValue = 100;
+                    _maxValue = 300;
+                    break;
+                case ParamType.WidthButt:
+                    _minValue = 80;
+                    _maxValue = 150;
+                    break;
+                case ParamType.LengthHandle:
+                    _minValue = 300;
+                    _maxValue = 900;
+                    break;
+                case ParamType.LengthButt:
+                    _minValue = 80;
+                    _maxValue = 270;
+                    break;
+                case ParamType.WidthHandle:
+                    _minValue = 20;
+                    _maxValue = 60;
+                    break;
+                case ParamType.ThicknessButt:
+                    _minValue = 24;
+                    _maxValue = 72;
+                    break;
+                default:
+                    throw new ArgumentException("Неизвестный тип параметра");
+            }
         }
 
-        // Валидация для класса Parameter
-        public virtual void Validator()
+        /// <summary>
+        /// Валидация значения.
+        /// </summary>
+        public void Validator()
         {
             if (Value < _minValue)
             {
-                throw new ArgumentException($"Значение меньше минимального допустимого значения ({_minValue} мм)");
+                throw new ArgumentException($"Значение меньше минимального " +
+                    $"допустимого значения ({_minValue} мм)");
             }
             else if (Value > _maxValue)
             {
-                throw new ArgumentException($"Значение больше максимального допустимого значения ({_maxValue} мм)");
+                throw new ArgumentException($"Значение больше максимального " +
+                    $"допустимого значения ({_maxValue} мм)");
             }
         }
     }
-    
+
 }

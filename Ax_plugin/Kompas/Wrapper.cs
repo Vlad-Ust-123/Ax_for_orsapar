@@ -1,6 +1,5 @@
 ﻿using System;
 using KompasAPI7;
-using Kompas6API5;
 using Kompas6Constants3D;
 using Kompas6Constants;
 
@@ -9,7 +8,7 @@ namespace Kompas
     /// <summary>
     /// Класс для работы с API Компас.
     /// </summary>
-    public class Wrapper //Обертка тут происходит магия 
+    public class Wrapper 
     {
         /// <summary>
         /// Объект API для работы с Kompas
@@ -105,7 +104,19 @@ namespace Kompas
             sketch.EndEdit();
         }
 
-        public ISketch CreateCircleAndReturnSketch(IPart7 part, object plane, double x, double y, double diameter, string sketchName)
+        //
+        /// <summary>
+        /// Создает эскиз на указанной плоскости, добавляет в него окружность и возвращает созданный эскиз.
+        /// </summary>
+        /// <param name="part">Объект детали, в которой будет создаваться эскиз.</param>
+        /// <param name="plane">Плоскость, на которой будет создан эскиз.</param>
+        /// <param name="x">Координата X центра окружности.</param>
+        /// <param name="y">Координата Y центра окружности.</param>
+        /// <param name="diameter">Диаметр окружности.</param>
+        /// <param name="sketchName">Имя создаваемого эскиза.</param>
+        /// <returns>Созданный эскиз <see cref="ISketch"/>.</returns>
+        public ISketch CreateCircleAndReturnSketch(IPart7 part, object plane, double x, 
+            double y, double diameter, string sketchName)
         {
             // Создаем эскиз на заданной плоскости с именем
             ISketch sketch = CreateSketchOnPlane(part, plane, sketchName);
@@ -132,12 +143,7 @@ namespace Kompas
             return sketch;
         }
 
-        public void CutCircleOnSketch(ISketch sketch, double depth, string cutName)
-        {
-            // Выполняем симметричное вырезание по переданному эскизу
-            CutExtrudeSymmetric(sketch, depth, cutName);
-        }
-
+    
         /// <summary>
         /// Метод для экструзии эскиза
         /// </summary>
@@ -203,7 +209,8 @@ namespace Kompas
         /// Получение стандартной плоскости на основе типа
         /// </summary>
         /// <param name="part">Часть, из которой нужно получить стандартную плоскость</param>
-        /// <param name="planeType">Тип стандартной плоскости (например, ksObj3dTypeEnum.o3d_planeXOZ)</param>
+        /// <param name="planeType">Тип стандартной плоскости 
+        /// (например, ksObj3dTypeEnum.o3d_planeXOZ)</param>
         /// <returns>Объект стандартной плоскости</returns>
         public object GetSidePlane(IPart7 part, ksObj3dTypeEnum planeType)
         {
@@ -214,10 +221,24 @@ namespace Kompas
             {
                 throw new InvalidOperationException("Не удалось получить стандартную плоскость.");
             }
-
-            return plane; // Возвращаем объект
+            // Возвращаем объект
+            return plane; 
         }
 
+        //
+        /// <summary>
+        /// Создает новый эскиз на указанной плоскости в заданной детали.
+        /// </summary>
+        /// <param name="part">Деталь <see cref="IPart7"/>, в которой будет создаваться эскиз.</param>
+        /// <param name="plane">Плоскость, на которой будет создан эскиз. 
+        /// Ожидается объект, который может быть преобразован в <see cref="IModelObject"/>.</param>
+        /// <param name="name">Имя создаваемого эскиза.</param>
+        /// <returns>Созданный эскиз <see cref="ISketch"/>.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Выбрасывается, если не удалось преобразовать 
+        /// <paramref name="part"/> в <see cref="IModelContainer"/> 
+        /// или если <paramref name="plane"/> не может быть преобразована в <see cref="IModelObject"/>.
+        /// </exception>
         public ISketch CreateSketchOnPlane(IPart7 part, object plane, string name)
         {
             IModelContainer modelContainer = part as IModelContainer;
@@ -234,13 +255,15 @@ namespace Kompas
             {
                 throw new InvalidOperationException("Плоскость не может быть преобразована в IModelObject.");
             }
-
-            sketch.Name = name;   // Устанавливаем имя
-            sketch.Hidden = false; // Делаем эскиз видимым
+            // Устанавливаем имя
+            sketch.Name = name;   
+            // Делаем эскиз видимым
+            sketch.Hidden = false; 
             sketch.Update();
 
             return sketch;
         }
+
 
         /// <summary>
         /// Вырезать выдавливанием симметрично из указанного эскиза
@@ -267,11 +290,12 @@ namespace Kompas
             // Добавляем операцию вырезания
             var extrusions = modelContainer.Extrusions;
             var cutExtrusion = extrusions.Add(Kompas6Constants3D.ksObj3dTypeEnum.o3d_cutExtrusion);
-
-            cutExtrusion.Direction = Kompas6Constants3D.ksDirectionTypeEnum.dtBoth; // Симметричное направление
-            cutExtrusion.Name = name; // Имя операции
+            // Симметричное направление
+            cutExtrusion.Direction = Kompas6Constants3D.ksDirectionTypeEnum.dtBoth; 
+            cutExtrusion.Name = name; 
             cutExtrusion.Hidden = false; // Сделать операцию видимой
-            cutExtrusion.ExtrusionType[true] = Kompas6Constants3D.ksEndTypeEnum.etBlind; // Глубина вырезания
+            // Глубина вырезания
+            cutExtrusion.ExtrusionType[true] = Kompas6Constants3D.ksEndTypeEnum.etBlind;
             cutExtrusion.Depth[true] = depth; // Устанавливаем глубину вырезания
             cutExtrusion.Depth[false] = depth; // Глубина в противоположную сторону
             cutExtrusion.DraftOutward[true] = false; // Без уклона
