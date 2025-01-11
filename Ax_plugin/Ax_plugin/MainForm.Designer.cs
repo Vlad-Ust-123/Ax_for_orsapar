@@ -83,7 +83,7 @@
             this.LenghtBladeTextBox.Name = "LenghtBladeTextBox";
             this.LenghtBladeTextBox.Size = new System.Drawing.Size(100, 22);
             this.LenghtBladeTextBox.TabIndex = 3;
-            this.LenghtBladeTextBox.Leave += new System.EventHandler(this.LenghtBladeTextBox_Leave);
+            this.LenghtBladeTextBox.Leave += new System.EventHandler(this.UniversalTextBoxLeaveHandler);
             // 
             // textBoxWidthButt
             // 
@@ -91,7 +91,7 @@
             this.textBoxWidthButt.Name = "textBoxWidthButt";
             this.textBoxWidthButt.Size = new System.Drawing.Size(100, 22);
             this.textBoxWidthButt.TabIndex = 4;
-            this.textBoxWidthButt.Leave += new System.EventHandler(this.textBoxWidthButt_Leave);
+            this.textBoxWidthButt.Leave += new System.EventHandler(this.UniversalTextBoxLeaveHandler);
             // 
             // label4
             // 
@@ -233,7 +233,7 @@
             this.textBoxThicknessButt.Name = "textBoxThicknessButt";
             this.textBoxThicknessButt.Size = new System.Drawing.Size(100, 22);
             this.textBoxThicknessButt.TabIndex = 13;
-            this.textBoxThicknessButt.Leave += new System.EventHandler(this.textBoxThicknessButt_Leave);
+            this.textBoxThicknessButt.Leave += new System.EventHandler(this.UniversalTextBoxLeaveHandler);
             // 
             // textBoxWidthHandle
             // 
@@ -241,7 +241,7 @@
             this.textBoxWidthHandle.Name = "textBoxWidthHandle";
             this.textBoxWidthHandle.Size = new System.Drawing.Size(100, 22);
             this.textBoxWidthHandle.TabIndex = 11;
-            this.textBoxWidthHandle.Leave += new System.EventHandler(this.textBoxWidthHandle_Leave);
+            this.textBoxWidthHandle.Leave += new System.EventHandler(this.UniversalTextBoxLeaveHandler);
             // 
             // textBoxLenghtButt
             // 
@@ -249,7 +249,7 @@
             this.textBoxLenghtButt.Name = "textBoxLenghtButt";
             this.textBoxLenghtButt.Size = new System.Drawing.Size(100, 22);
             this.textBoxLenghtButt.TabIndex = 10;
-            this.textBoxLenghtButt.Leave += new System.EventHandler(this.TextBoxLenghtButt_Leave);
+            this.textBoxLenghtButt.Leave += new System.EventHandler(this.UniversalTextBoxLeaveHandler);
             // 
             // TextBoxLengthHandle
             // 
@@ -257,7 +257,7 @@
             this.TextBoxLengthHandle.Name = "TextBoxLengthHandle";
             this.TextBoxLengthHandle.Size = new System.Drawing.Size(100, 22);
             this.TextBoxLengthHandle.TabIndex = 9;
-            this.TextBoxLengthHandle.Leave += new System.EventHandler(this.TextBoxLengthHandle_Leave);
+            this.TextBoxLengthHandle.Leave += new System.EventHandler(this.UniversalTextBoxLeaveHandler);
             // 
             // label16
             // 

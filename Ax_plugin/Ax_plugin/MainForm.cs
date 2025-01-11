@@ -73,6 +73,51 @@ namespace AxPlugin
         }
 
         /// <summary>
+        /// Универсальный обработчик события выхода из текстового поля.
+        /// Определяет параметр, связанный с текстовым полем, и вызывает метод для обработки валидации и обновления.
+        /// </summary>
+        /// <param name="sender">Объект, вызвавший событие (обычно текстовое поле).</param>
+        /// <param name="e">Данные события <see cref="EventArgs"/>.</param>
+        /// <remarks>
+        /// Этот метод связывает текстовые поля с их соответствующими параметрами, используя имя текстового поля.
+        /// Если имя текстового поля не соответствует известным параметрам, выводится сообщение об ошибке.
+        /// </remarks>
+        private void UniversalTextBoxLeaveHandler(object sender, EventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                ParamType parameterType;
+                switch (textBox.Name)
+                {
+                    case nameof(LenghtBladeTextBox):
+                        parameterType = ParamType.LengthBlade;
+                        break;
+                    case nameof(textBoxWidthButt):
+                        parameterType = ParamType.WidthButt;
+                        break;
+                    case nameof(TextBoxLengthHandle):
+                        parameterType = ParamType.LengthHandle;
+                        break;
+                    case nameof(textBoxLenghtButt):
+                        parameterType = ParamType.LengthButt;
+                        break;
+                    case nameof(textBoxWidthHandle):
+                        parameterType = ParamType.WidthHandle;
+                        break;
+                    case nameof(textBoxThicknessButt):
+                        parameterType = ParamType.ThicknessButt;
+                        break;
+                    default:
+                        // Если текстбокс не соответствует известным параметрам
+                        MessageBox.Show($"Не удалось определить параметр для {textBox.Name}");
+                        return;
+                }
+                // Выполняем обработку текстового поля и валидацию
+                HandleTextBoxLeave(textBox, parameterType);
+            }
+        }
+
+        /// <summary>
         /// Обработчик нажатия на кнопку "Создать".
         /// </summary>
         /// <param name="sender">Объект.</param>
@@ -108,54 +153,6 @@ namespace AxPlugin
         {
             ValidateAndSetColors(textBox, parameterType);
             ValidateDependencies();
-        }
-
-        /// <summary>
-        /// Обработчик выхода из текстбокса "Длина лезвия".
-        /// </summary>
-        private void LenghtBladeTextBox_Leave(object sender, EventArgs e)
-        {
-            HandleTextBoxLeave(this.LenghtBladeTextBox, ParamType.LengthBlade);
-        }
-
-        /// <summary>
-        /// Обработчик выхода из текстбокса "Длинна топорища".
-        /// </summary>
-        private void textBoxWidthButt_Leave(object sender, EventArgs e)
-        {
-            HandleTextBoxLeave(this.textBoxWidthButt, ParamType.WidthButt);
-        }
-
-        /// <summary>
-        /// Обработчик выхода из текстбокса "Длинна ручки топора".
-        /// </summary>
-        private void TextBoxLengthHandle_Leave(object sender, EventArgs e)
-        {
-            HandleTextBoxLeave(this.TextBoxLengthHandle, ParamType.LengthHandle);
-        }
-
-        /// <summary>
-        /// Обработчик выхода из текстбокса "Длинна обуха".
-        /// </summary>
-        private void TextBoxLenghtButt_Leave(object sender, EventArgs e)
-        {
-            HandleTextBoxLeave(this.textBoxLenghtButt, ParamType.LengthButt);
-        }
-
-        /// <summary>
-        /// Обработчик выхода из текстбокса "Ширина рукояти".
-        /// </summary>
-        private void textBoxWidthHandle_Leave(object sender, EventArgs e)
-        {
-            HandleTextBoxLeave(this.textBoxWidthHandle, ParamType.WidthHandle);
-        }
-
-        /// <summary>
-        /// Обработчик выхода из текстбокса "Толщина обуха".
-        /// </summary>
-        private void textBoxThicknessButt_Leave(object sender, EventArgs e)
-        {
-            HandleTextBoxLeave(this.textBoxThicknessButt, ParamType.ThicknessButt);
         }
 
         /// <summary>
@@ -250,15 +247,8 @@ namespace AxPlugin
                 isValidatingDependencies = true;
 
                 // Проверяем зависимые параметры от длины лезвия
-                LenghtBladeTextBox_Leave(null, null);
-
-                // Проверяем зависимые параметры от длины обуха
-                TextBoxLenghtButt_Leave(null, null);
-
-                // Обновляем валидацию всех остальных параметров
-                TextBoxLengthHandle_Leave(null, null);
-                textBoxWidthHandle_Leave(null, null);
-                textBoxThicknessButt_Leave(null, null);
+                UniversalTextBoxLeaveHandler(null, null);
+ 
             }
             finally
             {
@@ -297,8 +287,6 @@ namespace AxPlugin
             }
         }
 
-
-        
         /// <summary>
         /// Обработчик изменения состояния чекбокса "Пожарный топор".
         /// </summary>
@@ -309,7 +297,6 @@ namespace AxPlugin
             // Устанавливаем состояние IsFireAx в зависимости от текущего состояния CheckBox
             _builder.IsFireAx = checkBoxFireAx.Checked;
         }
-
        
         /// <summary>
         /// Обработчик изменения состояния чекбокса "Отверстие для подвеса".
