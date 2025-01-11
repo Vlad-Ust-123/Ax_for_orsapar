@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using AxPlugin;
 
-namespace ModelTest.AxParameterTest
+namespace UnitTest.AxParameterTest
 {
     [TestFixture]
     public class AxParametersTests

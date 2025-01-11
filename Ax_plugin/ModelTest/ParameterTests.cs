@@ -2,10 +2,10 @@
 using AxPlugin;
 using NUnit.Framework;
 
-namespace ModelTest.UnitTestParameter
+namespace UnitTest.ParameterTest
 {
     [TestFixture]
-    public class ParameterTest
+    public class ParameterTests
     {
         [Test]
         public void Parameter_Constructor_InitializesCorrectly()

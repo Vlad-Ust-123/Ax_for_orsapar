@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kompas", "Kompas\Kompas.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "Builder\Builder.csproj", "{F8DB1B21-FA1B-46CA-9299-5187DCC56DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelTest", "ModelTest\ModelTest.csproj", "{87CB1441-C537-47F9-B3FF-236DD6A1F960}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "ModelTest\UnitTest.csproj", "{87CB1441-C537-47F9-B3FF-236DD6A1F960}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StressTester", "StressTester\StressTester.csproj", "{CC6FA5F5-B581-4BD6-8F41-23515A30C672}"
 EndProject
