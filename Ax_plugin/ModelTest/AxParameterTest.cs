@@ -5,9 +5,16 @@ using AxPlugin;
 
 namespace UnitTest.AxParameterTest
 {
+    /// <summary>
+    /// Набор тестов для класса AxParameters.
+    /// </summary>
     [TestFixture]
     public class AxParametersTests
     {
+        /// <summary>
+        /// Проверяет, что свойство AllParameters возвращает не пустой 
+        /// словарь после инициализации объекта AxParameters.
+        /// </summary>
         [Test]
         public void AllParameters_Get_ReturnsNotNullDictionary()
         {
@@ -15,6 +22,9 @@ namespace UnitTest.AxParameterTest
             Assert.IsNotNull(axParameters.AllParameters);
         }
 
+        /// <summary>
+        /// Проверяет, что свойство AllParameters устанавливается корректно при присвоении валидного словаря.
+        /// </summary>
         [Test]
         public void AllParameters_Set_ValidDictionary_SetsCorrectly()
         {
@@ -28,6 +38,9 @@ namespace UnitTest.AxParameterTest
             Assert.AreSame(expected, axParameters.AllParameters);
         }
 
+        /// <summary>
+        /// Проверяет, что установка свойства AllParameters в null вызывает ArgumentNullException.
+        /// </summary>
         [Test]
         public void AllParameters_Set_NullValue_ThrowsArgumentNullException()
         {
@@ -35,6 +48,9 @@ namespace UnitTest.AxParameterTest
             Assert.Throws<ArgumentNullException>(() => axParameters.AllParameters = null);
         }
 
+        /// <summary>
+        /// Проверяет, что метод SetParameter устанавливает корректно параметр при передаче валидных данных.
+        /// </summary>
         [Test]
         public void SetParameter_ValidParameter_SetsCorrectly()
         {
@@ -47,6 +63,10 @@ namespace UnitTest.AxParameterTest
             Assert.That(axParameters.AllParameters[paramType].Value, Is.EqualTo(150));
         }
 
+        /// <summary>
+        /// Проверяет, что метод SetParameter при передаче null в 
+        /// качестве параметра выбрасывает ArgumentNullException.
+        /// </summary>
         [Test]
         public void SetParameter_NullParameter_ThrowsArgumentNullException()
         {
@@ -55,6 +75,9 @@ namespace UnitTest.AxParameterTest
             Assert.Throws<ArgumentNullException>(() => axParameters.SetParameter(paramType, null));
         }
 
+        /// <summary>
+        /// Проверяет, что метод SetParameter не выбрасывает исключения для валидного зависимого значения.
+        /// </summary>
         [Test]
         public void SetParameter_ValidDependentValue_DoesNotThrowException()
         {

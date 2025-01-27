@@ -1,16 +1,30 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+﻿using System;
 
 namespace AxPlugin
 {
+    /// <summary>
+    /// Класс, представляющий параметр с минимальным и максимальным значениями.
+    /// </summary>
     public class Parameter
     {
+        /// <summary>
+        /// Максимальное допустимое значение параметра.
+        /// </summary>
         private double _maxValue;
+
+        /// <summary>
+        /// Минимальное допустимое значение параметра.
+        /// </summary>
         private double _minValue;
+
+        /// <summary>
+        /// Текущее значение параметра.
+        /// </summary>
         private double _value;
 
+        /// <summary>
+        /// Свойство для доступа и изменения текущего значения параметра.
+        /// Выполняет валидацию значения при установке.
         public double Value
         {
             get => _value;
@@ -21,7 +35,14 @@ namespace AxPlugin
             }
         }
 
+        /// <summary>
+        /// Свойство для получения минимального допустимого значения параметра.
+        /// </summary>
         public double MinValue => _minValue;
+
+        /// <summary>
+        /// Свойство для получения максимального допустимого значения параметра.
+        /// </summary>
         public double MaxValue => _maxValue;
 
         /// <summary>

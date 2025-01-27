@@ -104,7 +104,6 @@ namespace Kompas
             sketch.EndEdit();
         }
 
-        //
         /// <summary>
         /// Создает эскиз на указанной плоскости, добавляет в него окружность и возвращает созданный эскиз.
         /// </summary>
@@ -143,7 +142,6 @@ namespace Kompas
             return sketch;
         }
 
-    
         /// <summary>
         /// Метод для экструзии эскиза
         /// </summary>
@@ -225,7 +223,7 @@ namespace Kompas
             return plane; 
         }
 
-        //
+        
         /// <summary>
         /// Создает новый эскиз на указанной плоскости в заданной детали.
         /// </summary>
@@ -256,7 +254,8 @@ namespace Kompas
                 throw new InvalidOperationException("Плоскость не может быть преобразована в IModelObject.");
             }
             // Устанавливаем имя
-            sketch.Name = name;   
+            sketch.Name = name;
+            
             // Делаем эскиз видимым
             sketch.Hidden = false; 
             sketch.Update();
@@ -290,10 +289,12 @@ namespace Kompas
             // Добавляем операцию вырезания
             var extrusions = modelContainer.Extrusions;
             var cutExtrusion = extrusions.Add(Kompas6Constants3D.ksObj3dTypeEnum.o3d_cutExtrusion);
+
             // Симметричное направление
             cutExtrusion.Direction = Kompas6Constants3D.ksDirectionTypeEnum.dtBoth; 
             cutExtrusion.Name = name; 
             cutExtrusion.Hidden = false; // Сделать операцию видимой
+
             // Глубина вырезания
             cutExtrusion.ExtrusionType[true] = Kompas6Constants3D.ksEndTypeEnum.etBlind;
             cutExtrusion.Depth[true] = depth; // Устанавливаем глубину вырезания

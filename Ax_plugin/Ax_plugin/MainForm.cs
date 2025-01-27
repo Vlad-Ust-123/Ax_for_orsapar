@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Perfomance;
 
 namespace AxPlugin
 {
@@ -161,11 +160,11 @@ namespace AxPlugin
         /// <param name="parameterType">Тип параметра.</param>
         /// <param name="color">Цвет подсветки.</param>
         /// <param name="tooltip">Текст подсказки.</param>
-        private void SetColors(ParamType parameterType, Color color, string tooltip)
+        private void SetColors(ParamType parameterType, 
+            Color color, string tooltip)
         {
             System.Windows.Forms.TextBox targetTextBox = null;
 
-            // Стандартный switch-case для определения текстбокса
             switch (parameterType)
             {
                 case ParamType.LengthBlade:
@@ -206,18 +205,14 @@ namespace AxPlugin
         {
             try
             {
-                double value = double.Parse(textBox.Text); // Преобразуем значение.
+                double value = double.Parse(textBox.Text); 
 
-                // Создаем параметр, передавая тип параметра и значение.
                 Parameter parameter = new Parameter(parameterType, value);
 
-                // Сохраняем параметр в коллекцию.
                 _parameters.SetParameter(parameterType, parameter);
 
-                // Успешная валидация — зеленый цвет.
                 SetColors(parameterType, Color.Green, null);
 
-                // Перекрестная проверка зависимых параметров.
                 if (!isCrossValidating)
                 {
                     isCrossValidating = true;
@@ -227,7 +222,6 @@ namespace AxPlugin
             }
             catch (Exception ex)
             {
-                // Ошибка валидации — красный цвет.
                 SetColors(parameterType, Color.Red, ex.Message);
             }
         }
@@ -240,7 +234,7 @@ namespace AxPlugin
         /// </summary>
         private void ValidateDependencies()
         {
-            if (isValidatingDependencies) return; // Если уже идет валидация, выходим
+            if (isValidatingDependencies) return; 
 
             try
             {
@@ -252,7 +246,8 @@ namespace AxPlugin
             }
             finally
             {
-                isValidatingDependencies = false; // Обязательно сбрасываем флаг
+                // Обязательно сбрасываем флаг
+                isValidatingDependencies = false; 
             }
         }
 
@@ -294,7 +289,6 @@ namespace AxPlugin
         /// <param name="e">Данные события.</param>
         private void checkBoxFireAx_CheckedChanged(object sender, EventArgs e)
         {
-            // Устанавливаем состояние IsFireAx в зависимости от текущего состояния CheckBox
             _builder.IsFireAx = checkBoxFireAx.Checked;
         }
        
@@ -305,7 +299,6 @@ namespace AxPlugin
         /// <param name="e">Данные события.</param>
         private void checkBoxMountingHole_CheckedChanged(object sender, EventArgs e)
         {
-            // Устанавливаем состояние IsMountingHole в зависимости от текущего состояния CheckBox
             _builder.IsMountingHole = checkBoxMountingHole.Checked;
         }
     }

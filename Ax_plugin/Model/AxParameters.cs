@@ -57,11 +57,13 @@ namespace AxPlugin
         private void ValidateParameters(ParamType parameterType, Parameter parameter)
         {
             var exceptions = new List<string>();
+
             //Множители для вычисления зависимых параметров
             double multiplierForLengthHandle = 3;
             double multiplierForLengthButt = 0.8;
             double multiplierForWidthHandle = 0.2;
             double multiplierForThicknessButt = 0.3;
+
             //Значения для вычисления диапазона допустимыз значений
             double rangeCalculationForLengthHandle = 1;
             double rangeCalculationForLengthButt = 2;
@@ -102,13 +104,8 @@ namespace AxPlugin
         /// <param name="tolerance">Допустимое отклонение.</param>
         /// <param name="exceptions">Список исключений для накопления ошибок.</param>
         /// <param name="parameterName">Имя проверяемого параметра.</param>
-        private void ValidateDependentParameter(
-            ParamType dependentType,
-            Parameter baseParameter,
-            double multiplier,
-            double tolerance,
-            List<string> exceptions,
-            string parameterName)
+        private void ValidateDependentParameter(ParamType dependentType,Parameter baseParameter,
+            double multiplier,double tolerance,List<string> exceptions,string parameterName)
         {
             if (_axParameters.TryGetValue(dependentType, out var dependentParameter))
             {
