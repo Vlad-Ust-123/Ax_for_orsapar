@@ -4,7 +4,7 @@ using Kompas;
 
 namespace AxPlugin
 {
-    
+    //TODO:XML
     public class Builder
     {
         /// <summary>
@@ -105,6 +105,7 @@ namespace AxPlugin
         /// </exception>
         private void BuildButt(IPart7 part, AxParameters parameters)
         {
+            //TODO: RSDN
             // Проверяем наличие необходимых параметров обуха.
             if (parameters.AllParameters.TryGetValue(ParamType.LengthBlade, out Parameter lengthBlade) &&
                 parameters.AllParameters.TryGetValue(ParamType.WidthButt, out Parameter widthButt) &&
@@ -328,6 +329,7 @@ namespace AxPlugin
         /// <param name="parameters">Параметры топора, содержащие размеры для отверстия.</param>
         private void BuildMountingHole(IPart7 part, AxParameters parameters)
         {
+            //TODO: RSDN
             if (parameters.AllParameters.TryGetValue(ParamType.WidthButt, out Parameter widthButt) &&
                 parameters.AllParameters.TryGetValue(ParamType.LengthBlade, out Parameter lengthBlade) &&
                 parameters.AllParameters.TryGetValue(ParamType.LengthButt, out Parameter lengthButt))
