@@ -4,7 +4,10 @@ using Kompas;
 
 namespace AxPlugin
 {
-    //TODO:XML
+    //TODO:XML +
+    /// <summary>
+    /// Класс для построение модели топора в CAD системе.
+    /// </summary>
     public class Builder
     {
         /// <summary>
@@ -75,8 +78,10 @@ namespace AxPlugin
         private void BuildHandle(IPart7 part, AxParameters parameters)
         {
             // Проверяем наличие необходимых параметров рукояти.
-            if (parameters.AllParameters.TryGetValue(ParamType.WidthHandle, out Parameter widthHandle) &&
-                parameters.AllParameters.TryGetValue(ParamType.LengthHandle, out Parameter lengthHandle))
+            if (parameters.AllParameters.TryGetValue(ParamType.WidthHandle, 
+                out Parameter widthHandle) &&
+                parameters.AllParameters.TryGetValue(ParamType.LengthHandle, 
+                out Parameter lengthHandle))
             {
                 // Создаем эскиз для рукояти.
                 ISketch sketch = _wrapper.CreateSketch(part, "Эскиз: рукоять");
@@ -105,18 +110,23 @@ namespace AxPlugin
         /// </exception>
         private void BuildButt(IPart7 part, AxParameters parameters)
         {
-            //TODO: RSDN
+            //TODO: RSDN +
             // Проверяем наличие необходимых параметров обуха.
-            if (parameters.AllParameters.TryGetValue(ParamType.LengthBlade, out Parameter lengthBlade) &&
-                parameters.AllParameters.TryGetValue(ParamType.WidthButt, out Parameter widthButt) &&
-                parameters.AllParameters.TryGetValue(ParamType.LengthButt, out Parameter lengthButt) &&
-                parameters.AllParameters.TryGetValue(ParamType.ThicknessButt, out Parameter thicknessButt))
+            if (parameters.AllParameters.TryGetValue(ParamType.LengthBlade, 
+                out Parameter lengthBlade) &&
+                parameters.AllParameters.TryGetValue(ParamType.WidthButt, 
+                out Parameter widthButt) &&
+                parameters.AllParameters.TryGetValue(ParamType.LengthButt, 
+                out Parameter lengthButt) &&
+                parameters.AllParameters.TryGetValue(ParamType.ThicknessButt, 
+                out Parameter thicknessButt))
             {
                 // Строим прямоугольник на обухе.
                 BuildTopRectangle(part, widthButt.Value, thicknessButt.Value, lengthButt.Value);
 
                 // Строим лезвие топора.
-                BuildBlade(part, widthButt.Value, lengthButt.Value, lengthBlade.Value, thicknessButt.Value);
+                BuildBlade(part, widthButt.Value, lengthButt.Value, 
+                    lengthBlade.Value, thicknessButt.Value);
             }
             else
             {
@@ -155,9 +165,9 @@ namespace AxPlugin
             double lengthBlade, double thickness)
         {
             // Параметры трапеции (равнобедренная)
-            double topBase = lengthButt;    // Верхняя основа (меньшая сторона)
-            double bottomBase = lengthBlade; // Нижняя основа (большая сторона)
-            double height = width;     // Высота трапеции
+            double topBase = lengthButt;    
+            double bottomBase = lengthBlade; 
+            double height = width;     
 
             //Задаем плоскость
             object sidePlane = _wrapper.GetSidePlane(part, 
@@ -168,27 +178,27 @@ namespace AxPlugin
                 "Эскиз: равнобедренная трапеция");
 
             // Смещение эскиза трапеции
-            double offsetX = -width / 2; // Смещение по оси X (конец прямоугольника)
-            double offsetY = -lengthButt / 2; // Смещение по оси Y (центр прямоугольника)
+            double offsetX = -width / 2; 
+            double offsetY = -lengthButt / 2; 
 
             // Координаты для равнобедренной трапеции (с учётом смещений)
-            double x1 = offsetX;                        // Левая вершина верхней основы
-            double y1 = offsetY - (topBase / 2);        // Верхняя основа центрирована по Y
+            double x1 = offsetX;                        
+            double y1 = offsetY - (topBase / 2);        
 
-            double x2 = offsetX;                        // Правая вершина верхней основы
+            double x2 = offsetX;                        
             double y2 = offsetY + (topBase / 2);
 
-            double x3 = offsetX - height;               // Левая вершина нижней основы
-            double y3 = offsetY - (bottomBase / 2);     // Нижняя основа центрирована по Y
+            double x3 = offsetX - height;               
+            double y3 = offsetY - (bottomBase / 2);     
 
-            double x4 = offsetX - height;               // Правая вершина нижней основы
+            double x4 = offsetX - height;               
             double y4 = offsetY + (bottomBase / 2);
 
             // Рисуем трапецию
-            _wrapper.CreateLine(trapezoidSketch, x1, y1, x2, y2); // Верхняя основа
-            _wrapper.CreateLine(trapezoidSketch, x2, y2, x4, y4); // Правая боковая сторона
-            _wrapper.CreateLine(trapezoidSketch, x4, y4, x3, y3); // Нижняя основа
-            _wrapper.CreateLine(trapezoidSketch, x3, y3, x1, y1); // Левая боковая сторона
+            _wrapper.CreateLine(trapezoidSketch, x1, y1, x2, y2); 
+            _wrapper.CreateLine(trapezoidSketch, x2, y2, x4, y4); 
+            _wrapper.CreateLine(trapezoidSketch, x4, y4, x3, y3); 
+            _wrapper.CreateLine(trapezoidSketch, x3, y3, x1, y1); 
 
             // Выдавливаем трапецию в обе стороны
             _wrapper.ExtrudeSketch(trapezoidSketch, thickness / 2, 
@@ -329,10 +339,13 @@ namespace AxPlugin
         /// <param name="parameters">Параметры топора, содержащие размеры для отверстия.</param>
         private void BuildMountingHole(IPart7 part, AxParameters parameters)
         {
-            //TODO: RSDN
-            if (parameters.AllParameters.TryGetValue(ParamType.WidthButt, out Parameter widthButt) &&
-                parameters.AllParameters.TryGetValue(ParamType.LengthBlade, out Parameter lengthBlade) &&
-                parameters.AllParameters.TryGetValue(ParamType.LengthButt, out Parameter lengthButt))
+            //TODO: RSDN +
+            if (parameters.AllParameters.TryGetValue(ParamType.WidthButt, 
+                out Parameter widthButt) &&
+                parameters.AllParameters.TryGetValue(ParamType.LengthBlade, 
+                out Parameter lengthBlade) &&
+                parameters.AllParameters.TryGetValue(ParamType.LengthButt, 
+                out Parameter lengthButt))
             {
                 double diameter = 10;
 
@@ -352,7 +365,8 @@ namespace AxPlugin
                     _wrapper.GetSidePlane(part, Kompas6Constants3D.ksObj3dTypeEnum.o3d_planeXOZ),
                     x, y, diameter, "Эскиз: отверстие для подвеса");
 
-                _wrapper.CutExtrudeSymmetric(sketch, 400, "Симметричное вырезание отверстия для подвеса");
+                _wrapper.CutExtrudeSymmetric(sketch, 400, 
+                    "Симметричное вырезание отверстия для подвеса");
             }
         }
     }

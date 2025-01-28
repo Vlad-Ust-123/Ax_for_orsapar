@@ -1,6 +1,6 @@
 ﻿namespace AxPlugin
 {
-    partial class MainForm
+    partial class AxPlugin
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -300,7 +300,7 @@
             this.toolTip1.ShowAlways = true;
             this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
             // 
-            // MainForm
+            // AxPlugin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -310,9 +310,9 @@
             this.Controls.Add(this.ButtonCreate);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "MainForm";
+            this.Name = "AxPlugin";
             this.Text = "AxPlugin";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.AxPlugin_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);

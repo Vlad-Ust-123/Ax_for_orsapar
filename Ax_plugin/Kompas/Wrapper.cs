@@ -245,7 +245,7 @@ namespace Kompas
                 throw new InvalidOperationException("Не удалось преобразовать part к IModelContainer.");
             }
 
-            ISketch sketch = modelContainer.Sketchs.Add(); // Добавляем эскиз через контейнер
+            ISketch sketch = modelContainer.Sketchs.Add(); 
 
             // Преобразуем объект plane к IModelObject
             sketch.Plane = plane as IModelObject;
@@ -293,14 +293,18 @@ namespace Kompas
             // Симметричное направление
             cutExtrusion.Direction = Kompas6Constants3D.ksDirectionTypeEnum.dtBoth; 
             cutExtrusion.Name = name; 
-            cutExtrusion.Hidden = false; // Сделать операцию видимой
+            cutExtrusion.Hidden = false; 
 
             // Глубина вырезания
             cutExtrusion.ExtrusionType[true] = Kompas6Constants3D.ksEndTypeEnum.etBlind;
-            cutExtrusion.Depth[true] = depth; // Устанавливаем глубину вырезания
-            cutExtrusion.Depth[false] = depth; // Глубина в противоположную сторону
-            cutExtrusion.DraftOutward[true] = false; // Без уклона
-            cutExtrusion.DraftOutward[false] = false; // Без уклона в обе стороны
+            // Устанавливаем глубину вырезания
+            cutExtrusion.Depth[true] = depth;
+            // Глубина в противоположную сторону
+            cutExtrusion.Depth[false] = depth;
+            // Без уклона
+            cutExtrusion.DraftOutward[true] = false;
+            // Без уклона в обе стороны
+            cutExtrusion.DraftOutward[false] = false; 
 
             // Привязываем профиль (эскиз) к операции вырезания
             var cutExtrusion1 = cutExtrusion as IExtrusion1;
@@ -309,8 +313,8 @@ namespace Kompas
                 throw new InvalidOperationException("Не удалось преобразовать выдавливание к IExtrusion1.");
             }
 
-            cutExtrusion1.Profile = sketch; // Эскиз для вырезания
-            cutExtrusion1.DirectionObject = sketch; // Направление вырезания от эскиза
+            cutExtrusion1.Profile = sketch; 
+            cutExtrusion1.DirectionObject = sketch; 
 
             // Обновляем операцию вырезания
             cutExtrusion.Update();

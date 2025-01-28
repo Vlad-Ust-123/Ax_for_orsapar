@@ -8,7 +8,7 @@ namespace AxPlugin
     /// <summary>
     /// Класс MainForm.
     /// </summary>
-    public partial class MainForm : Form
+    public partial class AxPlugin : Form
     {
         
         /// <summary>
@@ -22,9 +22,9 @@ namespace AxPlugin
         private AxParameters _parameters = new AxParameters();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainForm"/> class.
+        /// Initializes a new instance of the <see cref="AxPlugin"/> class.
         /// </summary>
-        public MainForm()
+        public AxPlugin()
         {
             this.InitializeComponent();
             //StressTester stress = new StressTester();
@@ -41,13 +41,13 @@ namespace AxPlugin
         /// </summary>
         private bool isValidatingDependencies = false;
 
-
+        //+
         /// <summary>
         /// Инициализация ряда параметров при загрузке формы.
         /// </summary>
         /// <param name="sender">Объект.</param>
         /// <param name="e">Аргумент.</param>
-        private void Form1_Load(object sender, EventArgs e)
+        private void AxPlugin_Load(object sender, EventArgs e)
         {
             this._parameters.AllParameters = new Dictionary<ParamType, Parameter>();
 
@@ -301,5 +301,7 @@ namespace AxPlugin
         {
             _builder.IsMountingHole = checkBoxMountingHole.Checked;
         }
+
+        
     }
 }
