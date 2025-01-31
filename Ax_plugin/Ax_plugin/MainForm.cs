@@ -41,7 +41,6 @@ namespace AxPlugin
         /// </summary>
         private bool isValidatingDependencies = false;
 
-        //RSDN +
         /// <summary>
         /// Инициализация ряда параметров при загрузке формы.
         /// </summary>
